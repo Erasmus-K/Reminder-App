@@ -7,11 +7,11 @@ const api = axios.create({
 });
 
 export const activityAPI = {
-  getAll: () => api.get('/api/activities'),
-  getById: (id) => api.get(`/api/activities/${id}`),
-  create: (activity) => api.post('/api/activities', activity),
-  update: (id, activity) => api.put(`/api/activities/${id}`, activity),
-  delete: (id) => api.delete(`/api/activities/${id}`),
+  getAll: () => api.get('/activities'),
+  getById: (id) => api.get(`/activities/${id}`),
+  create: (activity) => api.post('/activities', activity),
+  update: (id, activity) => api.put(`/activities/${id}`, activity),
+  delete: (id) => api.delete(`/activities/${id}`),
 };
 
 export default api;
