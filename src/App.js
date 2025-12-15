@@ -4,8 +4,9 @@ import ActivityList from './components/ActivityList';
 import Dashboard from './components/Dashboard';
 import Auth from './components/Auth';
 import LandingPage from './components/LandingPage';
+import NotificationPopup from './components/NotificationPopup';
 import { activityAPI } from './services/api';
-import { requestNotificationPermission, scheduleReminder } from './utils/notifications';
+import { requestNotificationPermission, scheduleReminder, snoozeReminder } from './utils/notifications';
 
 function App() {
   const [activities, setActivities] = useState([]);
@@ -14,6 +15,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [showLanding, setShowLanding] = useState(true);
+  const [currentNotification, setCurrentNotification] = useState(null);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -38,7 +40,7 @@ function App() {
       // Schedule reminders for pending activities
       response.data
         .filter(activity => activity.status === 'pending')
-        .forEach(scheduleReminder);
+        .forEach(activity => scheduleReminder(activity, setCurrentNotification));
     } catch (error) {
       console.error('Error loading activities:', error);
     } finally {
@@ -53,7 +55,7 @@ function App() {
       
       // Schedule reminder for new activity
       if (response.data.status === 'pending') {
-        scheduleReminder(response.data);
+        scheduleReminder(response.data, setCurrentNotification);
       }
     } catch (error) {
       console.error('Error adding activity:', error);
@@ -110,6 +112,17 @@ function App() {
   const handleGetStarted = () => {
     localStorage.setItem('hasVisited', 'true');
     setShowLanding(false);
+  };
+
+  const handleCloseNotification = () => {
+    setCurrentNotification(null);
+  };
+
+  const handleSnoozeNotification = () => {
+    if (currentNotification) {
+      snoozeReminder(currentNotification.activity, setCurrentNotification);
+      setCurrentNotification(null);
+    }
   };
 
   if (showLanding) {
@@ -211,6 +224,12 @@ function App() {
           </div>
         )}
       </div>
+      
+      <NotificationPopup
+        notification={currentNotification}
+        onClose={handleCloseNotification}
+        onSnooze={handleSnoozeNotification}
+      />
     </div>
   );
 }
