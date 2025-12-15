@@ -3,6 +3,7 @@ import ActivityForm from './components/ActivityForm';
 import ActivityList from './components/ActivityList';
 import Dashboard from './components/Dashboard';
 import Auth from './components/Auth';
+import LandingPage from './components/LandingPage';
 import { activityAPI } from './services/api';
 import { requestNotificationPermission, scheduleReminder } from './utils/notifications';
 
@@ -12,12 +13,19 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [showLanding, setShowLanding] = useState(true);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
+    const hasVisited = localStorage.getItem('hasVisited');
+    
     if (savedUser) {
       setUser(JSON.parse(savedUser));
+      setShowLanding(false);
+    } else if (hasVisited) {
+      setShowLanding(false);
     }
+    
     loadActivities();
     requestNotificationPermission();
   }, []);
@@ -98,6 +106,15 @@ function App() {
     setActivities([]);
     setActiveTab('dashboard');
   };
+
+  const handleGetStarted = () => {
+    localStorage.setItem('hasVisited', 'true');
+    setShowLanding(false);
+  };
+
+  if (showLanding) {
+    return <LandingPage onGetStarted={handleGetStarted} />;
+  }
 
   if (!user) {
     return <Auth onLogin={handleLogin} />;
