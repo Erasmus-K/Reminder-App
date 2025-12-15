@@ -1,0 +1,10 @@
+{
+  "env": {
+    "REACT_APP_API_BASE_URL": "https://json-server-vercel-rflj.vercel.app"
+  },
+  "build": {
+    "env": {
+      "REACT_APP_API_BASE_URL": "https://json-server-vercel-rflj.vercel.app"
+    }
+  }
+}
