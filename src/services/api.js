@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://json-server-vercel-rqie.vercel.app/activities';
+const API_BASE_URL = 'https://json-server-vercel-rflj.vercel.app/activities';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
