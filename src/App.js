@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ActivityForm from './components/ActivityForm';
 import ActivityList from './components/ActivityList';
 import Dashboard from './components/Dashboard';
+import Auth from './components/Auth';
 import { activityAPI } from './services/api';
 import { requestNotificationPermission, scheduleReminder } from './utils/notifications';
 
@@ -10,8 +11,13 @@ function App() {
   const [editingActivity, setEditingActivity] = useState(null);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
     loadActivities();
     requestNotificationPermission();
   }, []);
@@ -82,6 +88,21 @@ function App() {
     }
   };
 
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    setActivities([]);
+    setActiveTab('dashboard');
+  };
+
+  if (!user) {
+    return <Auth onLogin={handleLogin} />;
+  }
+
   if (loading) {
     return <div style={{ padding: '20px', textAlign: 'center' }}>Loading...</div>;
   }
@@ -94,8 +115,26 @@ function App() {
         padding: '1rem',
         marginBottom: '20px'
       }}>
-        <h1 style={{ color: 'white', margin: '0 0 10px 0' }}>Productivity Tracker</h1>
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1 style={{ color: 'white', margin: '0' }}>Productivity Tracker</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <span style={{ color: 'white' }}>Welcome, {user.name}!</span>
+            <button
+              onClick={handleLogout}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
           {['dashboard', 'activities', 'add'].map(tab => (
             <button
               key={tab}

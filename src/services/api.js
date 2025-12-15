@@ -14,4 +14,9 @@ export const activityAPI = {
   delete: (id) => api.delete(`/activities/${id}`),
 };
 
+export const authAPI = {
+  getUsers: () => api.get('/users'),
+  createUser: (user) => api.post('/users', user),
+};
+
 export default api;
