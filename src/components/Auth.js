@@ -10,42 +10,39 @@ const Auth = ({ onLogin }) => {
   });
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    try {
-      if (isLogin) {
-        const users = await authAPI.getUsers();
-        const user = users.data.find(u => u.email === formData.email && u.password === formData.password);
-        
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          onLogin(user);
-        } else {
-          setError('Invalid email or password');
-        }
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    if (isLogin) {
+      const user = users.find(u => u.email === formData.email && u.password === formData.password);
+      
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        onLogin(user);
       } else {
-        const users = await authAPI.getUsers();
-        const existingUser = users.data.find(u => u.email === formData.email);
-        
-        if (existingUser) {
-          setError('Email already exists');
-        } else {
-          const newUser = {
-            id: Date.now(),
-            name: formData.name,
-            email: formData.email,
-            password: formData.password
-          };
-          
-          await authAPI.createUser(newUser);
-          localStorage.setItem('user', JSON.stringify(newUser));
-          onLogin(newUser);
-        }
+        setError('Invalid email or password');
       }
-    } catch (error) {
-      setError('Something went wrong. Please try again.');
+    } else {
+      const existingUser = users.find(u => u.email === formData.email);
+      
+      if (existingUser) {
+        setError('Email already exists');
+      } else {
+        const newUser = {
+          id: Date.now(),
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        localStorage.setItem('user', JSON.stringify(newUser));
+        onLogin(newUser);
+      }
     }
   };
 
