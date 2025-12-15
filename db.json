@@ -1,0 +1,40 @@
+{
+  "activities": [
+    {
+      "id": 1,
+      "title": "Morning Coding Session",
+      "description": "Work on React components",
+      "date": "2024-01-15",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "status": "pending"
+    },
+    {
+      "id": 2,
+      "title": "Team Meeting",
+      "description": "Weekly standup meeting",
+      "date": "2024-01-15",
+      "startTime": "14:00",
+      "endTime": "15:00",
+      "status": "pending"
+    },
+    {
+      "id": 3,
+      "title": "Study JavaScript",
+      "description": "Learn advanced concepts",
+      "date": "2024-01-16",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "status": "in-progress"
+    },
+    {
+      "title": "Flask studied ",
+      "description": "Learn flask and take my self through it",
+      "date": "2025-12-15",
+      "startTime": "12:30",
+      "endTime": "13:30",
+      "status": "pending",
+      "id": 4
+    }
+  ]
+}
