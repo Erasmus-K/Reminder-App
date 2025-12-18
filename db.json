@@ -1,8 +1,22 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "email": "alice@mail.com",
+      "password": "1234"
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "email": "bob@mail.com",
+      "password": "abcd"
+    }
+  ],
   "activities": [
     {
       "id": 1,
+      "userId": 1,
       "title": "Morning Coding Session",
       "description": "Work on React components",
       "date": "2024-01-15",
@@ -12,15 +26,17 @@
     },
     {
       "id": 2,
+      "userId": 1,
       "title": "Team Meeting",
       "description": "Weekly standup meeting",
       "date": "2024-01-15",
       "startTime": "14:00",
       "endTime": "15:00",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": 3,
+      "userId": 2,
       "title": "Study JavaScript",
       "description": "Learn advanced concepts",
       "date": "2024-01-16",
@@ -29,31 +45,14 @@
       "status": "in-progress"
     },
     {
-      "title": "Flask studied ",
-      "description": "Learn flask and take my self through it",
-      "date": "2025-12-15",
-      "startTime": "12:30",
-      "endTime": "13:30",
-      "status": "pending",
-      "id": 4
-    },
-    {
-      "title": "Test",
-      "description": "Here is a test",
-      "date": "2025-12-15",
-      "startTime": "17:16",
-      "endTime": "20:16",
-      "status": "in-progress",
-      "id": 5
-    },
-    {
-      "title": "Erasmus should study",
-      "description": "soma boys ",
-      "date": "2025-12-15",
-      "startTime": "19:17",
-      "endTime": "20:18",
-      "status": "completed",
-      "id": 6
+      "id": 4,
+      "userId": 2,
+      "title": "Build React App",
+      "description": "Create productivity tracker",
+      "date": "2024-01-16",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "status": "pending"
     }
   ]
 }

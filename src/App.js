@@ -28,19 +28,26 @@ function App() {
       setShowLanding(false);
     }
     
-    loadActivities();
     requestNotificationPermission();
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      loadActivities();
+    }
+  }, [user]);
+
   const loadActivities = async () => {
     try {
-      const response = await activityAPI.getAll();
-      setActivities(response.data);
-      
-      // Schedule reminders for pending activities
-      response.data
-        .filter(activity => activity.status === 'pending')
-        .forEach(activity => scheduleReminder(activity, setCurrentNotification));
+      if (user) {
+        const response = await activityAPI.getByUserId(user.id);
+        setActivities(response.data);
+        
+        // Schedule reminders for pending activities
+        response.data
+          .filter(activity => activity.status === 'pending')
+          .forEach(activity => scheduleReminder(activity, setCurrentNotification));
+      }
     } catch (error) {
       console.error('Error loading activities:', error);
     } finally {
@@ -50,7 +57,11 @@ function App() {
 
   const handleAddActivity = async (activityData) => {
     try {
-      const response = await activityAPI.create(activityData);
+      const activityWithUserId = {
+        ...activityData,
+        userId: user.id
+      };
+      const response = await activityAPI.create(activityWithUserId);
       setActivities([...activities, response.data]);
       
       // Schedule reminder for new activity

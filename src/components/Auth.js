@@ -10,39 +10,40 @@ const Auth = ({ onLogin }) => {
   });
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-
-    if (isLogin) {
-      const user = users.find(u => u.email === formData.email && u.password === formData.password);
-      
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-        onLogin(user);
-      } else {
-        setError('Invalid email or password');
-      }
-    } else {
-      const existingUser = users.find(u => u.email === formData.email);
-      
-      if (existingUser) {
-        setError('Email already exists');
-      } else {
-        const newUser = {
-          id: Date.now(),
-          name: formData.name,
-          email: formData.email,
-          password: formData.password
-        };
+    try {
+      if (isLogin) {
+        const result = await authAPI.login(formData.email, formData.password);
         
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-        localStorage.setItem('user', JSON.stringify(newUser));
-        onLogin(newUser);
+        if (result && result.data) {
+          localStorage.setItem('user', JSON.stringify(result.data));
+          onLogin(result.data);
+        } else {
+          setError('Invalid email or password');
+        }
+      } else {
+        const users = await authAPI.getUsers();
+        const existingUser = users.data.find(u => u.email === formData.email);
+        
+        if (existingUser) {
+          setError('Email already exists');
+        } else {
+          const newUser = {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password
+          };
+          
+          const response = await authAPI.createUser(newUser);
+          localStorage.setItem('user', JSON.stringify(response.data));
+          onLogin(response.data);
+        }
       }
+    } catch (error) {
+      setError('Something went wrong. Please try again.');
     }
   };
 
