@@ -16,12 +16,23 @@ export const activityAPI = {
 };
 
 export const authAPI = {
-  getUsers: () => api.get('/users'),
-  createUser: (user) => api.post('/users', user),
   login: async (email, password) => {
-    const response = await api.get('/users');
-    const user = response.data.find(u => u.email === email && u.password === password);
+    // Demo users for testing
+    const demoUsers = [
+      { id: 1, name: "Alice Johnson", email: "alice@mail.com", password: "1234" },
+      { id: 2, name: "Bob Smith", email: "bob@mail.com", password: "abcd" }
+    ];
+    
+    const user = demoUsers.find(u => u.email === email && u.password === password);
     return user ? { data: user } : null;
+  },
+  createUser: (user) => {
+    // For demo, create user with random ID
+    const newUser = {
+      ...user,
+      id: Date.now()
+    };
+    return Promise.resolve({ data: newUser });
   },
 };
 

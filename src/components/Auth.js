@@ -25,22 +25,16 @@ const Auth = ({ onLogin }) => {
           setError('Invalid email or password');
         }
       } else {
-        const users = await authAPI.getUsers();
-        const existingUser = users.data.find(u => u.email === formData.email);
+        // For signup, create new user
+        const newUser = {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        };
         
-        if (existingUser) {
-          setError('Email already exists');
-        } else {
-          const newUser = {
-            name: formData.name,
-            email: formData.email,
-            password: formData.password
-          };
-          
-          const response = await authAPI.createUser(newUser);
-          localStorage.setItem('user', JSON.stringify(response.data));
-          onLogin(response.data);
-        }
+        const response = await authAPI.createUser(newUser);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        onLogin(response.data);
       }
     } catch (error) {
       setError('Something went wrong. Please try again.');
