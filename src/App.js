@@ -14,19 +14,14 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [showLanding, setShowLanding] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
   const [currentNotification, setCurrentNotification] = useState(null);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
-    const hasVisited = localStorage.getItem('hasVisited');
     
     if (savedUser) {
       setUser(JSON.parse(savedUser));
-      setShowLanding(false);
-    } else if (!hasVisited) {
-      setShowLanding(true);
-    } else {
       setShowLanding(false);
     }
     
@@ -123,7 +118,6 @@ function App() {
   };
 
   const handleGetStarted = () => {
-    localStorage.setItem('hasVisited', 'true');
     setShowLanding(false);
   };
 
